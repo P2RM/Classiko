@@ -1,27 +1,25 @@
 <?php
 //Page qui permet de créer son équipe
-require_once '../src/Squadsmanager.php';
-$squadsManager = new SquadsManager();
+require_once '../src/Playersmanager.php';
+$teamsManager = new TeamsManager();
 
 if($_SERVER["REQUEST_METHOD"]== "POST"){
     $name= $_POST["name"];
-    $surname= $_POST["surname"];
-    $country= $_POST["country"];
-    $club= $_POST["club"];
-    $size= $_POST["size"];
+    $nbPlayers= $_POST["nbPlayers"];
+    $descr= $_POST["descr"];
+    $sport= $_POST["sport"];
 
 
-$squad = new Squad (
+$team = new Team (
     $name,
-    $surname,
-    $country,
-    $club,
-    $size
+    $nbPlayers,
+    $descr,
+    $sport,
 );
 
-$errors = $squad->validate();
+$errors = $team->validate();
 if(empty($errors)){
-    $squadId = $squadsManager->addSquad($squad);
+    $teamId = $teamsManager->addTeam($team);
     header("Location: index.php");
     exit();
 }
@@ -32,7 +30,7 @@ if(empty($errors)){
 <html>
 
 <head>
-    <title>Crée un nouveau film favori | Gestionnaire des films favoris</title>
+    <title>Crée une nouvelle équipe :</title>
 
     <style>
         body {
@@ -125,9 +123,9 @@ if(empty($errors)){
 </head>
 
 <body>
-    <h1>Crée ton équipe de rêve !</h1>
+    <h1>Crée ton équipe</h1>
     <p><a href="index.php">Retour à l'accueil</a></p>
-    <p>Utilise cette page pour créer ton propre XI idéal.</p>
+    <p>Utilise cette page pour créer ton équipe.</p>
 
     <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { ?>
         <?php if (empty($errors)) { ?>
@@ -142,10 +140,10 @@ if(empty($errors)){
         <?php } ?>
     <?php } ?>
 
-    <form action="create.php" method ="POST">
+    <form action="createPlayer.php" method ="POST">
         
-        <label for="name">Prénom :</label><br>
-        <input type="text" id="name" name="name" value="<?php if (isset($name)) echo htmlspecialchars($name); ?>" required minlength="2" maxlength="40">
+        <label for="name">Nom de l'équipe :</label><br>
+        <input type="text" id="name" name="name" value="<?php if (isset($name)) echo htmlspecialchars($name); ?>" minlength="2" maxlength="100">
 
         <br>
 
@@ -154,8 +152,8 @@ if(empty($errors)){
 
         <br>
 
-        <label for="country">Pays :</label><br>
-        <input type="text" id="country" name="country" value="<?php if (isset($country)) echo htmlspecialchars($country); ?>" minlength="2" maxlength="40">
+        <label for="descr">Description :</label><br>
+       <textarea name="descr" id="descr" rows ="4" cols="50" ><?php if (isset($descr)) echo htmlspecialchars($descr); ?> </textarea>
 
         <br>
 
@@ -164,8 +162,8 @@ if(empty($errors)){
 
         <br>
 
-        <label for="size">Taille :</label><br>
-        <input type="number" id="size" name="size" value="<?php if (isset($size)) echo htmlspecialchars($size); ?>" required min="100" max="210">
+        <label for="sport">Type de sport :</label><br>
+        <input type="text" id="sport" name="sport" value="<?php if (isset($sport)) echo htmlspecialchars($sport); ?>" required>
 
         <br>
 
